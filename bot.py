@@ -226,9 +226,13 @@ Send me a video URL to get started!
     
     await message.reply_text(status_text, parse_mode="Markdown")
 
-@app.on_message(filters.text & ~filters.command())
+@app.on_message(filters.text)
 async def handle_url(client: Client, message: Message):
     """Handle video URLs"""
+    # Skip if this is a command
+    if message.text.startswith('/'):
+        return
+        
     url = message.text.strip()
     
     # Basic URL validation
