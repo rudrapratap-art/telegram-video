@@ -147,7 +147,7 @@ def create_format_keyboard(formats: list, video_id: str) -> InlineKeyboardMarkup
 async def start_command(client: Client, message: Message):
     """Handle /start command"""
     welcome_text = """
-🎬 **Welcome to Video Downloader Bot!**
+🎬 <b>Welcome to Video Downloader Bot!</b>
 
 I can download videos from most popular websites including:
 • YouTube
@@ -157,12 +157,12 @@ I can download videos from most popular websites including:
 • Facebook
 • And many more!
 
-**How to use:**
+<b>How to use:</b>
 1. Send me a video URL
 2. Choose your preferred format
 3. Download your video!
 
-**Commands:**
+<b>Commands:</b>
 /start - Show this message
 /help - Show help information
 /status - Check bot status
@@ -170,15 +170,15 @@ I can download videos from most popular websites including:
 Made with ❤️ using yt-dlp
     """
     
-    await message.reply_text(welcome_text, parse_mode="Markdown")
+    await message.reply_text(welcome_text, parse_mode="html")
 
 @app.on_message(filters.command("help"))
 async def help_command(client: Client, message: Message):
     """Handle /help command"""
     help_text = """
-📖 **Help Guide**
+📖 <b>Help Guide</b>
 
-**Supported Sites:**
+<b>Supported Sites:</b>
 • YouTube (videos, shorts, live streams)
 • Instagram (posts, reels, stories)
 • TikTok (videos)
@@ -189,42 +189,42 @@ async def help_command(client: Client, message: Message):
 • Dailymotion
 • And 1000+ more sites!
 
-**How to download:**
+<b>How to download:</b>
 1. Copy the video URL
 2. Send it to me
 3. Wait for format options
 4. Select your preferred quality
 5. Download the file
 
-**Tips:**
+<b>Tips:</b>
 • For better quality, choose higher resolution
 • Audio-only formats are smaller in size
 • Some videos may take time to process
 • Large files might be split due to Telegram limits
 
-**Need help?** Contact @your_username
+<b>Need help?</b> Contact @your_username
     """
     
-    await message.reply_text(help_text, parse_mode="Markdown")
+    await message.reply_text(help_text, parse_mode="html")
 
 @app.on_message(filters.command("status"))
 async def status_command(client: Client, message: Message):
     """Handle /status command"""
     status_text = """
-🤖 **Bot Status**
+🤖 <b>Bot Status</b>
 
-✅ **Bot is running**
-✅ **yt-dlp is available**
-✅ **Ready to download videos**
+✅ <b>Bot is running</b>
+✅ <b>yt-dlp is available</b>
+✅ <b>Ready to download videos</b>
 
-**Uptime:** Since last restart
-**Version:** 1.0.0
-**Powered by:** yt-dlp + Pyrogram
+<b>Uptime:</b> Since last restart
+<b>Version:</b> 1.0.0
+<b>Powered by:</b> yt-dlp + Pyrogram
 
 Send me a video URL to get started!
     """
     
-    await message.reply_text(status_text, parse_mode="Markdown")
+    await message.reply_text(status_text, parse_mode="html")
 
 @app.on_message(filters.text)
 async def handle_url(client: Client, message: Message):
@@ -241,14 +241,14 @@ async def handle_url(client: Client, message: Message):
         return
     
     # Send processing message
-    processing_msg = await message.reply_text("🔍 **Processing your video...**\n\nPlease wait while I extract the available formats.", parse_mode="Markdown")
+    processing_msg = await message.reply_text("🔍 <b>Processing your video...</b>\n\nPlease wait while I extract the available formats.", parse_mode="html")
     
     try:
         # Extract video information
         info = await extract_video_info(url)
         
         if not info:
-            await processing_msg.edit_text("❌ **Error:** Could not extract video information.\n\nPlease check if the URL is valid and the video is available.")
+            await processing_msg.edit_text("❌ <b>Error:</b> Could not extract video information.\n\nPlease check if the URL is valid and the video is available.")
             return
         
         # Get video details
@@ -261,7 +261,7 @@ async def handle_url(client: Client, message: Message):
         formats = get_available_formats(info)
         
         if not formats:
-            await processing_msg.edit_text("❌ **Error:** No downloadable formats found for this video.")
+            await processing_msg.edit_text("❌ <b>Error:</b> No downloadable formats found for this video.")
             return
         
         # Generate unique video ID
@@ -272,12 +272,12 @@ async def handle_url(client: Client, message: Message):
         
         # Prepare response text
         response_text = f"""
-🎬 **Video Found!**
+🎬 <b>Video Found!</b>
 
-**Title:** {title[:100]}{'...' if len(title) > 100 else ''}
-**Uploader:** {uploader}
-**Duration:** {format_duration(duration)}
-**Available Formats:** {len(formats)}
+<b>Title:</b> {title[:100]}{'...' if len(title) > 100 else ''}
+<b>Uploader:</b> {uploader}
+<b>Duration:</b> {format_duration(duration)}
+<b>Available Formats:</b> {len(formats)}
 
 Choose your preferred format below:
         """
@@ -286,7 +286,7 @@ Choose your preferred format below:
         await processing_msg.edit_text(
             response_text,
             reply_markup=keyboard,
-            parse_mode="Markdown"
+            parse_mode="html"
         )
         
         # Store video info for later use
@@ -300,7 +300,7 @@ Choose your preferred format below:
         
     except Exception as e:
         logger.error(f"Error processing URL: {e}")
-        await processing_msg.edit_text(f"❌ **Error:** An unexpected error occurred.\n\nError: {str(e)}")
+        await processing_msg.edit_text(f"❌ <b>Error:</b> An unexpected error occurred.\n\nError: {str(e)}")
 
 @app.on_callback_query()
 async def handle_callback(client: Client, callback_query: CallbackQuery):
@@ -346,7 +346,7 @@ async def handle_callback(client: Client, callback_query: CallbackQuery):
             if video_id in user_states:
                 del user_states[video_id]
             
-            await callback_query.message.edit_text("❌ **Download cancelled.**\n\nSend me another video URL to try again.", parse_mode="Markdown")
+            await callback_query.message.edit_text("❌ <b>Download cancelled.</b>\n\nSend me another video URL to try again.", parse_mode="html")
             await callback_query.answer("Download cancelled")
             
         elif data.startswith("header_"):
@@ -362,32 +362,32 @@ async def start_download(client: Client, callback_query: CallbackQuery, video_in
     try:
         # Update message to show download progress
         progress_text = f"""
-⏳ **Downloading...**
+⏳ <b>Downloading...</b>
 
-**Format:** {selected_format.get('ext', 'mp4')}
-**Quality:** {selected_format.get('height', 'N/A')}p
-**Size:** {format_size(selected_format.get('filesize', 0)) if selected_format.get('filesize') else 'Unknown'}
+<b>Format:</b> {selected_format.get('ext', 'mp4')}
+<b>Quality:</b> {selected_format.get('height', 'N/A')}p
+<b>Size:</b> {format_size(selected_format.get('filesize', 0)) if selected_format.get('filesize') else 'Unknown'}
 
 Please wait while I download your video...
         """
         
-        await callback_query.message.edit_text(progress_text, parse_mode="Markdown")
+        await callback_query.message.edit_text(progress_text, parse_mode="html")
         
         # Download the video
         downloaded_file = await download_video(video_info['url'], selected_format)
         
         if not downloaded_file:
-            await callback_query.message.edit_text("❌ **Download failed.**\n\nPlease try again or choose a different format.")
+            await callback_query.message.edit_text("❌ <b>Download failed.</b>\n\nPlease try again or choose a different format.")
             return
         
         # Send the video file
         caption = f"""
-✅ **Download Complete!**
+✅ <b>Download Complete!</b>
 
-**Title:** {video_info['info'].get('title', 'Unknown')[:50]}
-**Format:** {selected_format.get('ext', 'mp4')}
-**Quality:** {selected_format.get('height', 'N/A')}p
-**Size:** {format_size(os.path.getsize(downloaded_file))}
+<b>Title:</b> {video_info['info'].get('title', 'Unknown')[:50]}
+<b>Format:</b> {selected_format.get('ext', 'mp4')}
+<b>Quality:</b> {selected_format.get('height', 'N/A')}p
+<b>Size:</b> {format_size(os.path.getsize(downloaded_file))}
 
 Downloaded with ❤️ by Video Downloader Bot
         """
@@ -398,25 +398,25 @@ Downloaded with ❤️ by Video Downloader Bot
                 chat_id=callback_query.message.chat.id,
                 audio=downloaded_file,
                 caption=caption,
-                parse_mode="Markdown"
+                parse_mode="html"
             )
         else:
             await client.send_video(
                 chat_id=callback_query.message.chat.id,
                 video=downloaded_file,
                 caption=caption,
-                parse_mode="Markdown"
+                parse_mode="html"
             )
         
         # Clean up
         os.remove(downloaded_file)
         
         # Update message
-        await callback_query.message.edit_text("✅ **Download completed successfully!**\n\nSend me another video URL to download more videos.", parse_mode="Markdown")
+        await callback_query.message.edit_text("✅ <b>Download completed successfully!</b>\n\nSend me another video URL to download more videos.", parse_mode="html")
         
     except Exception as e:
         logger.error(f"Error in download process: {e}")
-        await callback_query.message.edit_text(f"❌ **Download failed.**\n\nError: {str(e)}")
+        await callback_query.message.edit_text(f"❌ <b>Download failed.</b>\n\nError: {str(e)}")
 
 async def download_video(url: str, format_info: dict) -> Optional[str]:
     """Download video using yt-dlp"""
