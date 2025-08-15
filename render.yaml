@@ -10,3 +10,4 @@ services:
         value: ${API_HASH}
     buildCommand: pip install -r requirements.txt
     startCommand: python bot.py
+    plan: free
