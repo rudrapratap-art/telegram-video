@@ -226,7 +226,7 @@ Send me a video URL to get started!
     
     await message.reply_text(status_text, parse_mode="Markdown")
 
-@app.on_message(filters.text & ~filters.command)
+@app.on_message(filters.text & ~filters.command())
 async def handle_url(client: Client, message: Message):
     """Handle video URLs"""
     url = message.text.strip()
