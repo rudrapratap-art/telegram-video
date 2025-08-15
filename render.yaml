@@ -1,0 +1,12 @@
+services:
+  - type: worker
+    name: telegram-video-bot
+    envVars:
+      - key: BOT_TOKEN
+        value: ${BOT_TOKEN}
+      - key: API_ID
+        value: ${API_ID}
+      - key: API_HASH
+        value: ${API_HASH}
+    buildCommand: pip install -r requirements.txt
+    startCommand: python bot.py
